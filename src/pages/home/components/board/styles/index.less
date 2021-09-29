@@ -1,0 +1,32 @@
+.mind-board {
+  .menus {
+    padding: 10px 50px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    .left-menus {
+      margin-right: 50px;
+    }
+    .center-menus {
+      flex: 1;
+    }
+    .right-menus {
+    }
+    .menus-body {
+      display: flex;
+      align-items: center;
+      .menu {
+        cursor: pointer;
+        & + .menu {
+          margin-left: 20px;
+        }
+        img {
+          width: 32px;
+          height: 32px;
+          display: block;
+        }
+      }
+    }
+  }
+}
+
