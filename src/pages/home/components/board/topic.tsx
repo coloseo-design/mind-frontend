@@ -1,24 +1,25 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import classNames from 'classnames';
 import React, { useCallback, useState, useEffect } from 'react';
+import { TopicProps } from './MindNode';
 import Modal from './modal';
 import './styles/right-menu.less';
 
-interface TopicProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  title: string | null;
-  onInsert: () => void;
-  onDelete: () => void;
-  onCopy: () => void;
-}
-
 const Topic: React.FC<TopicProps> = ({
-  title, onInsert, onCopy, onDelete,
+  data = { title: '未定义标题' },
+  onInsert,
+  onCopy,
+  onDelete,
+  position = { x: 1110, y: 1156 },
 }: TopicProps) => {
-  const [topic, setTopic] = useState(() => title || '未定义标题');
-  const [topic2, setTopic2] = useState(() => title || '未定义标题');
+  const [topic, setTopic] = useState(() => data.title || '未定义标题');
+  const [topic2, setTopic2] = useState(() => data.title || '未定义标题');
   const [editable, setEditable] = useState(false);
   const ref = React.useRef(null);
   const [contextVisible, setContextVisible] = useState(false);
+  /**
+   * 用来标记右键点击的位置
+   */
   const [contextPosition, setContextPosition] = useState({
     left: 0,
     top: 0,
@@ -48,6 +49,20 @@ const Topic: React.FC<TopicProps> = ({
   const onContextMenu = useCallback((evt) => {
     evt.preventDefault();
     setContextVisible(true);
+    // console.log('evt', evt);
+    // const {
+    //   top, left, height, width,
+    // } = evt.target.getBoundingClientRect();
+    // const { pageXOffset, pageYOffset } = window;
+    // const targetX = pageXOffset + left + width / 2;
+    // const targetY = pageYOffset + top + height / 2;
+    // const targetX = position.x;
+    // const targetY = position.y;
+    // console.log('targetx', targetX, targetY);
+    // setCenter({
+    //   x: targetX,
+    //   y: targetY,
+    // });
     setContextPosition({
       left: evt.pageX,
       top: evt.pageY,
@@ -72,8 +87,8 @@ const Topic: React.FC<TopicProps> = ({
       delete: onDelete,
       copy: onCopy,
     };
-    handlers[key] && handlers[key]();
-  }, [onCopy, onDelete, onInsert]);
+    handlers[key] && handlers[key](position, data);
+  }, [data, onCopy, onDelete, onInsert, position]);
 
   const events = [
     {
@@ -95,19 +110,21 @@ const Topic: React.FC<TopicProps> = ({
       className="topic"
       onContextMenu={onContextMenu}
       style={{
-        top: 1110,
-        left: 1156,
+        top: position.y,
+        left: position.x,
       }}
     >
-      <div className="title" onDoubleClick={onEditable}>{topic}</div>
-      <div
-        className={editAreaCls}
-        contentEditable={editable}
-        onBlur={onBlur}
-        ref={ref}
-        onInput={onChange}
-      >
-        {topic2}
+      <div>
+        <div className="title" onDoubleClick={onEditable}>{topic}</div>
+        <div
+          className={editAreaCls}
+          contentEditable={editable}
+          onBlur={onBlur}
+          ref={ref}
+          onInput={onChange}
+        >
+          {topic2}
+        </div>
       </div>
       <Modal>
         {
