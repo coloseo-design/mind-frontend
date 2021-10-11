@@ -105,9 +105,12 @@ const Topic: React.FC<TopicProps> = ({
     },
   ];
 
+  const containerCls = classNames('topic', {
+    root: data.isRoot,
+  });
   return (
     <div
-      className="topic"
+      className={containerCls}
       onContextMenu={onContextMenu}
       style={{
         top: position.y,

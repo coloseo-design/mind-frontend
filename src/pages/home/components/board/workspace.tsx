@@ -9,6 +9,7 @@ const Workspace: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = () => {
     {
       data: {
         title: '未定义标题',
+        isRoot: true,
       },
       position: { x: 800, y: 800 },
       childNodes: [],
@@ -20,6 +21,7 @@ const Workspace: React.FC<React.HtmlHTMLAttributes<HTMLDivElement>> = () => {
     const child = {
       data: {
         title: '未定义子主题',
+        isRoot: false,
       },
       position,
       childNodes: [],

@@ -1,5 +1,6 @@
 interface NodeData {
   title: string;
+  isRoot: boolean;
 }
 
 /**
@@ -26,7 +27,7 @@ export interface MindNode {
 }
 
 export interface TopicProps extends MindNode, Omit<React.HtmlHTMLAttributes<HTMLDivElement>, 'title'> {
-  onInsert: () => void;
+  onInsert: (position: Position, data: NodeData) => void;
   onDelete: () => void;
   onCopy: () => void;
 }

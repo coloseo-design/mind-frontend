@@ -3,7 +3,7 @@
 import { Position } from './MindNode';
 
 /**
- *
+ * 计算元素的位置
  * @param position 圆心位置
  * @param rate 角度 / 360
  * @param redius 半径
