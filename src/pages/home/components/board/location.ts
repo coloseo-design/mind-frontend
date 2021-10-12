@@ -14,7 +14,7 @@ export default function getLocation(position: Position, rate: number, redius: nu
   const y = Math.sin(rad) * redius;
   const x = Math.cos(rad) * redius;
   return {
-    x: x + position.x,
+    x: x > 0 ? position.x + redius : position.x - redius,
     y: y + position.y,
   };
 }

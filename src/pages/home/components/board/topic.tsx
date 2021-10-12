@@ -6,17 +6,26 @@ import Modal from './modal';
 import './styles/right-menu.less';
 
 const Topic: React.FC<TopicProps> = ({
-  data = { title: '未定义标题' },
-  onInsert,
-  onCopy,
-  onDelete,
-  position = { x: 1110, y: 1156 },
+  data,
+  ...rest
 }: TopicProps) => {
-  const [topic, setTopic] = useState(() => data.title || '未定义标题');
-  const [topic2, setTopic2] = useState(() => data.title || '未定义标题');
+  const {
+    title,
+    isRoot,
+    position,
+    size,
+  } = data;
+  const [topic, setTopic] = useState(() => title || '未定义标题');
+  const [topic2, setTopic2] = useState(() => title || '未定义标题');
   const [editable, setEditable] = useState(false);
   const ref = React.useRef(null);
   const [contextVisible, setContextVisible] = useState(false);
+  // actions
+  const {
+    onInsert,
+    onCopy,
+    onDelete,
+  } = rest;
   /**
    * 用来标记右键点击的位置
    */
@@ -50,9 +59,13 @@ const Topic: React.FC<TopicProps> = ({
     evt.preventDefault();
     setContextVisible(true);
     // console.log('evt', evt);
-    // const {
-    //   top, left, height, width,
-    // } = evt.target.getBoundingClientRect();
+    const {
+      height, width,
+    } = evt.currentTarget.getBoundingClientRect();
+    Object.assign(size, {
+      width,
+      height,
+    });
     // const { pageXOffset, pageYOffset } = window;
     // const targetX = pageXOffset + left + width / 2;
     // const targetY = pageYOffset + top + height / 2;
@@ -81,14 +94,14 @@ const Topic: React.FC<TopicProps> = ({
 
   const onContextMenuClick = useCallback((evt) => {
     setContextVisible(false);
-    const { key } = evt.target.dataset;
+    const { key } = evt.currentTarget.dataset;
     const handlers = {
       insert: onInsert,
       delete: onDelete,
       copy: onCopy,
     };
-    handlers[key] && handlers[key](position, data);
-  }, [data, onCopy, onDelete, onInsert, position]);
+    handlers[key] && handlers[key](evt, data);
+  }, [data, onCopy, onDelete, onInsert]);
 
   const events = [
     {
@@ -106,7 +119,7 @@ const Topic: React.FC<TopicProps> = ({
   ];
 
   const containerCls = classNames('topic', {
-    root: data.isRoot,
+    root: isRoot,
   });
   return (
     <div
@@ -129,9 +142,9 @@ const Topic: React.FC<TopicProps> = ({
           {topic2}
         </div>
       </div>
-      <Modal>
-        {
-          contextVisible && (
+      {
+        contextVisible && (
+          <Modal>
             <div
               className="g-right-menus"
               style={{
@@ -149,11 +162,20 @@ const Topic: React.FC<TopicProps> = ({
                 }
               </ul>
             </div>
-          )
-        }
-      </Modal>
+          </Modal>
+        )
+      }
     </div>
   );
+};
+
+Topic.defaultProps = {
+  data: {
+    isRoot: false,
+    title: '未命名节点',
+    position: { x: 800, y: 800 },
+    size: { width: 0, height: 0 },
+  },
 };
 
 export default Topic;

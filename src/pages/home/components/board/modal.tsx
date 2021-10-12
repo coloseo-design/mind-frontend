@@ -12,7 +12,6 @@ export default class Modal extends React.PureComponent<React.HTMLAttributes<HTML
     root.style.top = '0';
     root.style.left = '0';
     root.style.width = '100%';
-
     this.root = root;
   }
 
